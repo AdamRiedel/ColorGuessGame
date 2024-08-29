@@ -1,0 +1,102 @@
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Itim;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: Itim;
+  src: url("./src/font/Itim-Regular.ttf");
+}
+
+h1 {
+  font-size: 7.993rem;
+}
+
+h2 {
+  font-size: 5.653rem;
+}
+
+h3 {
+  font-size: 3.998rem;
+}
+
+h4 {
+  font-size: 2.827rem;
+}
+h5 {
+  font-size: 1.999rem;
+}
+h6 {
+  font-size: 1.414rem;
+}
+
+p,
+a,
+button {
+  font-size: 1rem;
+}
+
+small {
+  font-size: 0.707rem;
+}
+
+.container {
+  width: 95%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+  border: 3px solid red;
+}
+
+@media (min-width: 576px) {
+  .container {
+    width: 90%;
+  }
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 1.1rem;
+  }
+  .container {
+    width: 85%;
+  }
+}
+
+@media (min-width: 992px) {
+  html {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  html {
+    font-size: 1.15rem;
+  }
+  .container {
+    width: 80%;
+  }
+}
+
+@media (min-width: 1400px) {
+  html {
+    font-size: 1.2rem;
+  }
+  .container {
+    width: 70%;
+  }
+}
+
+@media (min-width: 1920px) {
+  html {
+    font-size: 1.2rem;
+  }
+  .container {
+    width: 60%;
+  }
+}
