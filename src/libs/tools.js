@@ -1,4 +1,4 @@
-export const colorboxes = document.querySelectorAll(".colorbox");
+export let colorboxes = document.querySelectorAll(".colorbox");
 export const hexcode = document.querySelector("#hexcode");
 const countdown = document.querySelector(".countdown");
 
@@ -7,6 +7,7 @@ export const startGameBtn = document.querySelector(".toggle-btn");
 export const spanRounds = document.querySelector(".rounds");
 export const spanPoints = document.querySelector(".points");
 export const scoreContainer = document.querySelector("#score-container");
+export const modusBtnContainer = document.querySelector(".modus-btn-container");
 
 export let searchedColor = null;
 export let fillColors = [];
@@ -15,10 +16,27 @@ export let mixedArray = [];
 let interval;
 let rounds = 1;
 let points = 0;
+let modus = 2;
+
+modusBtnContainer.addEventListener("click", (event) => {
+  if (event.target.className === "modus-btn") {
+    resetStats();
+    modus = event.target.dataset.modus;
+    colorsContainer.innerHTML = "";
+
+    for (let i = 0; i <= modus; i++) {
+      const box = document.createElement("div");
+      box.classList.add("colorbox");
+      colorsContainer.appendChild(box);
+    }
+    colorboxes = document.querySelectorAll(".colorbox");
+    colorsContainer.addEventListener("click", colorBoxEvent);
+  }
+});
 
 export function prepareGame() {
-  searchedColor = generateRandomColor(); // This is searched color
-  fillColors = fillRoundColors(11); // fill my array up
+  searchedColor = generateRandomColor(); 
+  fillColors = fillRoundColors(modus);
   fillColors.push(searchedColor);
   mixedArray = shuffle(fillColors);
   spanRounds.innerText = rounds;
@@ -89,7 +107,6 @@ function startCountdown(seconds) {
       updateScoring();
       showScoring();
       clearInterval(interval);
-      // Scoreboard
       resetStats();
     }
   }, 1000);
@@ -136,11 +153,17 @@ export function showScoring() {
   const savedScores = localStorage.getItem("scores");
   const savedScoresArray = savedScores ? savedScores.split(",") : [];
 
-  scoreContainer.innerHTML = "";
+  const newArray = savedScoresArray.map((element) => {
+    return Number(element);
+  });
 
-  savedScoresArray.forEach((element) => {
+  newArray.sort((a, b) => {
+    return b - a;
+  });
+
+  newArray.forEach((element) => {
     const h5 = document.createElement("h5");
-    h5.innerText = element;
+    h5.innerText = element.toString();
     scoreContainer.appendChild(h5);
   });
 }
@@ -151,10 +174,7 @@ export function colorBoxEvent(event) {
   }
   const { hex } = event.target.dataset;
   const result = checkColors(searchedColor, hex);
-
-  // User missclicked
   if (!result) {
-    // Scoreboard einfügen (Localstorage)
     updateScoring();
     showScoring();
     resetStats(colorBoxEvent);
