@@ -17,11 +17,25 @@ let interval;
 let rounds = 1;
 let points = 0;
 let modus = 2;
+let time = 20;
 
 modusBtnContainer.addEventListener("click", (event) => {
   if (event.target.className === "modus-btn") {
     resetStats();
-    modus = event.target.dataset.modus;
+    startGameBtn.classList.remove("stop");
+    startGameBtn.innerText = "Start Game";
+    modus = Number(event.target.dataset.modus);
+    switch (modus) {
+      case 2:
+        time = 20;
+        break;
+      case 5:
+        time = 15;
+        break;
+      case 11:
+        time = 10;
+        break;
+    }
     colorsContainer.innerHTML = "";
 
     for (let i = 0; i <= modus; i++) {
@@ -34,30 +48,37 @@ modusBtnContainer.addEventListener("click", (event) => {
   }
 });
 
+// Functions for Setting the Game6
+
 export function prepareGame() {
-  searchedColor = generateRandomColor(); 
-  fillColors = fillRoundColors(modus);
+  searchedColor = generateRandomColor(); // This is searched color
+  fillColors = fillRoundColors(modus); // fill my array up
   fillColors.push(searchedColor);
   mixedArray = shuffle(fillColors);
   spanRounds.innerText = rounds;
   setGame();
 }
 
-export function resetStats() {
-  setGame("Start Game", "#d8dbe2", true, false);
-  colorsContainer.removeEventListener("click", colorBoxEvent);
-  rounds = 0;
-  points = 0;
-  spanRounds.innerText = rounds;
-  spanPoints.innerText = points;
+export function setGame(innerText, colorcode, renew, needCountdown = true) {
+  if (renew === true) {
+    searchedColor = generateRandomColor();
+  }
+
+  hexcode.innerText = innerText || searchedColor;
+  colorboxes.forEach((element, index) => {
+    element.style.backgroundColor = colorcode || mixedArray[index];
+    element.dataset.hex = mixedArray[index];
+  });
+
+  clearInterval(interval);
+  if (needCountdown) {
+    startCountdown(time);
+    return;
+  }
+  countdown.innerText = "00:00";
 }
 
-export function updateStats() {
-  rounds += 1;
-  points += 5;
-  spanRounds.innerText = rounds;
-  spanPoints.innerText = points;
-}
+// Functions for Setting Colors
 
 export function generateRandomColor() {
   let hexCode = "#";
@@ -85,51 +106,10 @@ export function shuffle(array) {
     [array[i], array[rndIndex]] = [array[rndIndex], array[i]];
   }
 
-  console.log(array);
   return array;
 }
 
-export function checkColors(hex1, hex2) {
-  if (hex1 === hex2) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-function startCountdown(seconds) {
-  let timer = seconds;
-  interval = setInterval(() => {
-    timer -= 1;
-    let displaySeconds = timer < 10 ? "0" + timer : timer;
-    countdown.innerText = "00:" + displaySeconds;
-    if (timer <= 0) {
-      updateScoring();
-      showScoring();
-      clearInterval(interval);
-      resetStats();
-    }
-  }, 1000);
-}
-
-export function setGame(innerText, colorcode, renew, needCountdown = true) {
-  if (renew === true) {
-    searchedColor = generateRandomColor();
-  }
-
-  hexcode.innerText = innerText || searchedColor;
-  colorboxes.forEach((element, index) => {
-    element.style.backgroundColor = colorcode || mixedArray[index];
-    element.dataset.hex = mixedArray[index];
-  });
-
-  clearInterval(interval);
-  if (needCountdown) {
-    startCountdown(30);
-    return;
-  }
-  countdown.innerText = "00:00";
-}
+// Functions for Scoring
 
 function updateScoring() {
   const scores = localStorage.getItem("scores");
@@ -152,6 +132,7 @@ function updateScoring() {
 export function showScoring() {
   const savedScores = localStorage.getItem("scores");
   const savedScoresArray = savedScores ? savedScores.split(",") : [];
+  scoreContainer.innerHTML = "";
 
   const newArray = savedScoresArray.map((element) => {
     return Number(element);
@@ -168,13 +149,76 @@ export function showScoring() {
   });
 }
 
+// Functions for handling stats
+
+export function resetStats() {
+  setGame("Start Game", "#373f51", true, false);
+  colorsContainer.removeEventListener("click", colorBoxEvent);
+  rounds = 0;
+  points = 0;
+  spanRounds.innerText = rounds;
+  spanPoints.innerText = points;
+}
+
+export function updateStats() {
+  rounds += 1;
+  switch (modus) {
+    case 2:
+      points += 2;
+      break;
+    case 5:
+      points += 4;
+      break;
+    case 11:
+      points += 6;
+      break;
+  }
+
+  spanRounds.innerText = rounds;
+  spanPoints.innerText = points;
+}
+
+// Helpers
+
+function startCountdown(seconds) {
+  let timer = seconds;
+  interval = setInterval(() => {
+    timer -= 1;
+    let displaySeconds = timer < 10 ? "0" + timer : timer;
+    countdown.innerText = "00:" + displaySeconds;
+    if (timer <= 0) {
+      startGameBtn.classList.remove("stop");
+      startGameBtn.innerText = "Start Game";
+      updateScoring();
+      showScoring();
+      clearInterval(interval);
+      resetStats();
+    }
+  }, 1000);
+}
+
+export function checkColors(hex1, hex2) {
+  if (hex1 === hex2) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// Eventhandler for Eventlistener
+
 export function colorBoxEvent(event) {
   if (event.target.className !== "colorbox") {
     return;
   }
   const { hex } = event.target.dataset;
   const result = checkColors(searchedColor, hex);
+
+  // User missclicked
   if (!result) {
+    // Scoreboard einfügen (Localstorage)
+    startGameBtn.classList.remove("stop");
+    startGameBtn.innerText = "Start Game";
     updateScoring();
     showScoring();
     resetStats(colorBoxEvent);
@@ -183,4 +227,21 @@ export function colorBoxEvent(event) {
 
   updateStats();
   prepareGame();
+}
+
+export function toggleGame(event) {
+  if (event.target.classList.contains("stop")) {
+    event.target.classList.toggle("stop");
+    event.target.innerText = "Start Game";
+
+    clearInterval(interval);
+    updateScoring();
+    showScoring();
+    resetStats();
+  } else {
+    event.target.classList.toggle("stop");
+    event.target.innerText = "Stop Game";
+    prepareGame();
+    colorsContainer.addEventListener("click", colorBoxEvent);
+  }
 }

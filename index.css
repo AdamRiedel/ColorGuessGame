@@ -19,7 +19,9 @@
   --color5: #d8dbe2;
   --color6: #3f84e5;
   --color7: #303642;
-  --boxshadow1: 2px 1px 5px 0 rgba(0, 0, 0, 0.24), 8px 6px 10px 0 rgba(0, 0, 0, 0.21), 17px 13px 13px 0 rgba(0, 0, 0, 0.12), 31px 22px 15px 0 rgba(0, 0, 0, 0.04), 48px 35px 17px 0 rgba(0, 0, 0, 0);
+  --boxshadow1: 2px 1px 5px 0 rgba(0, 0, 0, 0.24),
+    8px 6px 10px 0 rgba(0, 0, 0, 0.21), 17px 13px 13px 0 rgba(0, 0, 0, 0.12),
+    31px 22px 15px 0 rgba(0, 0, 0, 0.04), 48px 35px 17px 0 rgba(0, 0, 0, 0);
 }
 
 h1 {
@@ -56,6 +58,10 @@ small {
 
 body {
   background-color: var(--color1);
+  background-image: url("./src/public/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   min-height: 100vh;
   display: flex;
   flex-wrap: wrap;
@@ -110,7 +116,13 @@ body {
         .colorbox {
           height: 4rem;
           border-radius: 20px;
-          background-color: var(--color5);
+          background-color: var(--color1);
+          cursor: pointer;
+          transition: 0.3s;
+          box-shadow: var(--boxshadow1);
+          &:hover {
+            transform: scale(1.05);
+          }
         }
       }
     }
@@ -133,6 +145,34 @@ body {
           padding: 1rem 2rem;
           border-radius: 20px;
           font-size: 2rem;
+          cursor: pointer;
+          transition: 0.3s;
+          border: none;
+          box-shadow: var(--boxshadow1);
+
+          &:hover {
+            transform: scale(1.05);
+          }
+        }
+
+        .stop {
+          background-color: var(--color4);
+        }
+      }
+
+      .modus-btn-container {
+        button {
+          padding: 1rem;
+          font-size: 1rem;
+          background-color: var(--color5);
+          border-radius: 10px;
+          transition: 0.3s;
+          border: none;
+          box-shadow: var(--boxshadow1);
+
+          &:hover {
+            transform: scale(1.05);
+          }
         }
       }
       .aside-cont {
@@ -156,7 +196,7 @@ body {
     main {
       .main-game-section {
         .colors-container {
-          grid-template-columns: repeat(4, 5rem);
+          grid-template-columns: repeat(3, 5rem);
           .colorbox {
             height: 5rem;
           }
@@ -214,7 +254,8 @@ body {
       flex-wrap: nowrap;
       .main-game-section {
         .colors-container {
-          grid-template-columns: repeat(4, 5rem);
+          min-width: 31.25rem;
+          grid-template-columns: repeat(3, 5rem);
           .colorbox {
             height: 5rem;
           }
