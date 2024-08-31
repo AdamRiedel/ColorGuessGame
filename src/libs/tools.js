@@ -1,3 +1,18 @@
+export const colorboxes = document.querySelectorAll(".colorbox");
+export const hexcode = document.querySelector("#hexcode");
+
+export let searchedColor = null;
+export let fillColors = [];
+export let mixedArray = [];
+
+export function prepareGame() {
+  searchedColor = generateRandomColor(); // This is searched color
+  fillColors = fillRoundColors(11); // fill my array up
+  fillColors.push(searchedColor);
+  mixedArray = shuffle(fillColors);
+  setGame();
+}
+
 export function generateRandomColor() {
   let hexCode = "#";
   const chars = "0123456789ABCDEF";
@@ -27,6 +42,7 @@ export function shuffle(array) {
 }
 
 export function checkColors(hex1, hex2) {
+  console.log(hex1, hex2);
   if (hex1 === hex2) {
     return true;
   } else {
@@ -34,11 +50,15 @@ export function checkColors(hex1, hex2) {
   }
 }
 
-export function setGame(searchedColor, mixedArray, colorboxes, hexcode) {
-  hexcode.innerText = searchedColor;
+export function setGame(innerText, colorcode, renew) {
+  if (renew === true) {
+    searchedColor = generateRandomColor();
+  }
+
+  hexcode.innerText = innerText || searchedColor;
 
   colorboxes.forEach((element, index) => {
-    element.style.backgroundColor = mixedArray[index];
+    element.style.backgroundColor = colorcode || mixedArray[index];
     element.dataset.hex = mixedArray[index];
   });
 }

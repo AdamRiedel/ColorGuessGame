@@ -1,33 +1,23 @@
 import {
-  generateRandomColor,
-  fillRoundColors,
-  shuffle,
   checkColors,
   setGame,
+  searchedColor,
+  prepareGame,
 } from "./src/libs/tools.js";
 
-const hexcode = document.querySelector("#hexcode");
 const colorsContainer = document.querySelector(".colors-container");
-const colorboxes = document.querySelectorAll(".colorbox");
 const startGameBtn = document.querySelector(".toggle-btn");
 const spanRounds = document.querySelector(".rounds");
 const spanPoints = document.querySelector(".points");
 
-let searchedColor = null;
-let fillColors = [];
-let mixedArray = [];
 let rounds = 0;
 let points = 0;
 
 startGameBtn.addEventListener("click", () => {
-  searchedColor = generateRandomColor();
-  fillColors = fillRoundColors(11);
-  fillColors.push(searchedColor);
-  mixedArray = shuffle(fillColors);
+  prepareGame();
+
   spanRounds.innerText = 1;
   rounds = 1;
-
-  setGame(searchedColor, mixedArray, colorboxes, hexcode);
 
   function colorBoxEvent(event) {
     if (event.target.className !== "colorbox") {
@@ -38,9 +28,8 @@ startGameBtn.addEventListener("click", () => {
 
     if (!result) {
       console.log("Leider Falsch");
-      setGame("Start Game", [], colorboxes, hexcode);
+      setGame("Start Game", "#d8dbe2", true);
       colorsContainer.removeEventListener("click", colorBoxEvent);
-      // Scoreboard einfügen (Localstorage)
       rounds = 0;
       points = 0;
       spanRounds.innerText = rounds;
@@ -53,6 +42,7 @@ startGameBtn.addEventListener("click", () => {
     points += 5;
     spanRounds.innerText = rounds;
     spanPoints.innerText = points;
+    prepareGame();
     console.log(result);
   }
 
