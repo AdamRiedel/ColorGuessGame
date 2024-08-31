@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: Itim;
-  src: url("./src/fonts/Itim-Regular.ttf"), type("truetype");
+  src: url("./src/font/Itim-Regular.ttf"), type("truetype");
 }
 
 :root {
