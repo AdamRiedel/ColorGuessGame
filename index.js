@@ -9,9 +9,26 @@ const colorsContainer = document.querySelector(".colors-container");
 const startGameBtn = document.querySelector(".toggle-btn");
 const spanRounds = document.querySelector(".rounds");
 const spanPoints = document.querySelector(".points");
+const countdown = document.querySelector(".countdown");
 
 let rounds = 0;
 let points = 0;
+
+function startCountdown(seconds) {
+  let timer = seconds;
+
+  const interval = setInterval(() => {
+    timer -= 1;
+    let displaySeconds = timer < 10 ? "0" + timer : timer;
+    countdown.innerText = "00:" + displaySeconds;
+
+    if (timer <= 0) {
+      clearInterval(interval);
+    }
+  }, 1000);
+}
+
+startCountdown(10);
 
 startGameBtn.addEventListener("click", () => {
   prepareGame();
