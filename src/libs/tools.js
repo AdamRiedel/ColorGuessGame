@@ -25,3 +25,20 @@ export function shuffle(array) {
   }
   return array;
 }
+
+export function checkColors(hex1, hex2) {
+  if (hex1 === hex2) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function setGame(searchedColor, mixedArray, colorboxes, hexcode) {
+  hexcode.innerText = searchedColor;
+
+  colorboxes.forEach((element, index) => {
+    element.style.backgroundColor = mixedArray[index];
+    element.dataset.hex = mixedArray[index];
+  });
+}
