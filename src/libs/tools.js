@@ -17,7 +17,7 @@ let interval;
 let rounds = 1;
 let points = 0;
 let modus = 2;
-let time = 20;
+let time = 30;
 
 modusBtnContainer.addEventListener("click", (event) => {
   if (event.target.className === "modus-btn") {
@@ -27,13 +27,13 @@ modusBtnContainer.addEventListener("click", (event) => {
     modus = Number(event.target.dataset.modus);
     switch (modus) {
       case 2:
-        time = 20;
+        time = 30;
         break;
       case 5:
-        time = 15;
+        time = 30;
         break;
       case 11:
-        time = 10;
+        time = 30;
         break;
     }
     colorsContainer.innerHTML = "";
@@ -48,11 +48,9 @@ modusBtnContainer.addEventListener("click", (event) => {
   }
 });
 
-// Functions for Setting the Game6
-
 export function prepareGame() {
-  searchedColor = generateRandomColor(); // This is searched color
-  fillColors = fillRoundColors(modus); // fill my array up
+  searchedColor = generateRandomColor();
+  fillColors = fillRoundColors(modus); 
   fillColors.push(searchedColor);
   mixedArray = shuffle(fillColors);
   spanRounds.innerText = rounds;
@@ -77,8 +75,6 @@ export function setGame(innerText, colorcode, renew, needCountdown = true) {
   }
   countdown.innerText = "00:00";
 }
-
-// Functions for Setting Colors
 
 export function generateRandomColor() {
   let hexCode = "#";
@@ -108,8 +104,6 @@ export function shuffle(array) {
 
   return array;
 }
-
-// Functions for Scoring
 
 function updateScoring() {
   const scores = localStorage.getItem("scores");
@@ -149,8 +143,6 @@ export function showScoring() {
   });
 }
 
-// Functions for handling stats
-
 export function resetStats() {
   setGame("Start Game", "#373f51", true, false);
   colorsContainer.removeEventListener("click", colorBoxEvent);
@@ -178,8 +170,6 @@ export function updateStats() {
   spanPoints.innerText = points;
 }
 
-// Helpers
-
 function startCountdown(seconds) {
   let timer = seconds;
   interval = setInterval(() => {
@@ -205,8 +195,6 @@ export function checkColors(hex1, hex2) {
   }
 }
 
-// Eventhandler for Eventlistener
-
 export function colorBoxEvent(event) {
   if (event.target.className !== "colorbox") {
     return;
@@ -214,9 +202,7 @@ export function colorBoxEvent(event) {
   const { hex } = event.target.dataset;
   const result = checkColors(searchedColor, hex);
 
-  // User missclicked
   if (!result) {
-    // Scoreboard einfügen (Localstorage)
     startGameBtn.classList.remove("stop");
     startGameBtn.innerText = "Start Game";
     updateScoring();
