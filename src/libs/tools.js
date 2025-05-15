@@ -50,7 +50,7 @@ modusBtnContainer.addEventListener("click", (event) => {
 
 export function prepareGame() {
   searchedColor = generateRandomColor();
-  fillColors = fillRoundColors(modus); 
+  fillColors = fillRoundColors(modus);
   fillColors.push(searchedColor);
   mixedArray = shuffle(fillColors);
   spanRounds.innerText = rounds;
@@ -203,11 +203,22 @@ export function colorBoxEvent(event) {
   const result = checkColors(searchedColor, hex);
 
   if (!result) {
-    startGameBtn.classList.remove("stop");
-    startGameBtn.innerText = "Start Game";
-    updateScoring();
-    showScoring();
-    resetStats(colorBoxEvent);
+    // Richtige Farbe hervorheben
+    colorboxes.forEach((box) => {
+      if (box.dataset.hex === searchedColor) {
+        box.classList.add("correct");
+      }
+    });
+
+    // Nach 1 Sekunde zurücksetzen
+    setTimeout(() => {
+      colorboxes.forEach((box) => box.classList.remove("correct"));
+      startGameBtn.classList.remove("stop");
+      startGameBtn.innerText = "Start Game";
+      updateScoring();
+      showScoring();
+      resetStats(colorBoxEvent);
+    }, 1000);
     return;
   }
 
