@@ -203,14 +203,12 @@ export function colorBoxEvent(event) {
   const result = checkColors(searchedColor, hex);
 
   if (!result) {
-    // Richtige Farbe hervorheben
     colorboxes.forEach((box) => {
       if (box.dataset.hex === searchedColor) {
         box.classList.add("correct");
       }
     });
 
-    // Nach 1 Sekunde zurücksetzen
     setTimeout(() => {
       colorboxes.forEach((box) => box.classList.remove("correct"));
       startGameBtn.classList.remove("stop");
@@ -218,7 +216,7 @@ export function colorBoxEvent(event) {
       updateScoring();
       showScoring();
       resetStats(colorBoxEvent);
-    }, 1000);
+    }, 2000);
     return;
   }
 
